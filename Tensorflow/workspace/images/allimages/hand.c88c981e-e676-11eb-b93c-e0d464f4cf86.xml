@@ -1,0 +1,26 @@
+<annotation>
+	<folder>allimages</folder>
+	<filename>hand.c88c981e-e676-11eb-b93c-e0d464f4cf86.jpg</filename>
+	<path>D:\GitHub\SLAIComputerVisionProject\Tensorflow\workspace\images\allimages\hand.c88c981e-e676-11eb-b93c-e0d464f4cf86.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>480</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>hand</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>276</xmin>
+			<ymin>217</ymin>
+			<xmax>320</xmax>
+			<ymax>332</ymax>
+		</bndbox>
+	</object>
+</annotation>

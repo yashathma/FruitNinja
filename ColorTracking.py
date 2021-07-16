@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+
 cap = cv2.VideoCapture(0)
 img2 = cv2.imread("/Users/yash/PycharmProjects/FruitNinja/Hand.png")
 
@@ -10,12 +11,6 @@ while True:
     # res, tMask = cv2.threshold(gImg, 50, 255, cv2.THRESH_BINARY)
     # maskedImg2 = cv2.bitwise_and(img1, img1, mask=tMask)
     # print("Threshold mask")
-
-
-
-
-
-
 
     gray = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
 
@@ -39,7 +34,7 @@ while True:
     matches.sort(key=lambda mat: mat.distance)
 
     # Find index where matches start to be over threshold
-    i=0
+    i = 0
     for i in range(len(matches)):
         if matches[i].distance > 50.0:
             break
@@ -47,11 +42,6 @@ while True:
     # Draw good-quality matches up to the threshold index
     img3 = cv2.drawMatches(img1, kp1, img2, kp2, matches[:i], None)
 
-
-
-
-
     cv2.imshow("Video", img3)
 
     cv2.waitKeyEx(30)
-
