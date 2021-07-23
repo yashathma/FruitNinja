@@ -1,57 +1,78 @@
 import cv2
 import numpy as np
+
+def averageList(inputArr):
+    total = 0
+    for idx in inputArr:
+        total += idx
+
+    return int(total/len(inputArr))
+
+
 cap = cv2.VideoCapture(0)
-img2 = cv2.imread("/Users/yash/PycharmProjects/FruitNinja/Hand.png")
+
+xAxis = 500
+yAxis = 250
+xRate = 20
+yRate = 20
 
 while True:
-    res, img1 = cap.read()
-    # gImg = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
-
-    # res, tMask = cv2.threshold(gImg, 50, 255, cv2.THRESH_BINARY)
-    # maskedImg2 = cv2.bitwise_and(img1, img1, mask=tMask)
-    # print("Threshold mask")
-
-
-
-
+    res, img = cap.read()
+    hsvim = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    lower = np.array([0, 0, 0], dtype="uint8")
+    upper = np.array([100, 100, 100], dtype="uint8")
+    skinRegionHSV = cv2.inRange(hsvim, lower, upper)
+    blurred = cv2.blur(skinRegionHSV, (2, 2))
+    ret, thresh = cv2.threshold(blurred, 0, 255, cv2.THRESH_BINARY)
+    thresh = cv2.flip(thresh, 1)
 
 
 
-    gray = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
 
-    lowThresh = 100
-    highThresh = 150
-    img1 = cv2.Canny(gray, lowThresh, highThresh)
+    xList = []
+    yList = []
+    height = thresh.shape
+    for i in range(0, height[0]):
+        for g in range(0, height[1]):
+            if thresh[i][g] == 255:
+                xList.append(g)
+                yList.append(i)
 
-    # img1 = cv2.blur(img1, (5, 5))
-    # img1 = cv2.inRange(img1, np.array([120, 120, 100]), np.array([255, 255, 255]))
 
-    orb = cv2.ORB_create()
-    bfMatcher = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
-
-    kp1, des1 = orb.detectAndCompute(img1, None)
-    kp2, des2 = orb.detectAndCompute(img2, None)
-
-    # Find all stable matches: matches is a list of Match objects that identify the indices of the matching
-    matches = bfMatcher.match(des1, des2)
-
-    # Sort matches by distance (best matches come first in the list)
-    matches.sort(key=lambda mat: mat.distance)
-
-    # Find index where matches start to be over threshold
-    i=0
-    for i in range(len(matches)):
-        if matches[i].distance > 50.0:
-            break
-
-    # Draw good-quality matches up to the threshold index
-    img3 = cv2.drawMatches(img1, kp1, img2, kp2, matches[:i], None)
+    HandXPos = height[1]-averageList(xList)
+    HandYPos = averageList(yList)
+    cv2.ellipse(img, (HandXPos, HandYPos ), (20, 20), 30, 0, 360, (0, 255, 0), -1)
+    cv2.putText(img, "Hand", (HandXPos-20, HandYPos+5), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(0, 0, 0),1, cv2.LINE_AA, False)
 
 
 
 
 
-    cv2.imshow("Video", img3)
 
-    cv2.waitKeyEx(30)
 
+
+
+
+
+    if xAxis>thresh.shape[0]-100 or xAxis<50:
+        xRate = xRate*(-1)
+
+    if yAxis>thresh.shape[1]-50 or yAxis<50:
+        yRate = yRate*(-1)
+
+
+
+
+
+    xAxis+=xRate
+    yAxis+=yRate
+
+    #cv2.ellipse(img, (yAxis, xAxis), (50, 50), 30, 0, 360, (255, 255, 0), -1)
+
+    cv2.imshow("thresh", thresh)
+
+
+
+
+
+    cv2.waitKey(1)
