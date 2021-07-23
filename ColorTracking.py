@@ -69,7 +69,7 @@ while True:
 
     #cv2.ellipse(img, (yAxis, xAxis), (50, 50), 30, 0, 360, (255, 255, 0), -1)
 
-    cv2.imshow("thresh", thresh)
+    cv2.imshow("thresh", img)
 
 
 
